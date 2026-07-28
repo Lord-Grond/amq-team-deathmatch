@@ -5,12 +5,20 @@
     <h1 class="display-6 fw-bold mb-0">BOARD</h1>
     <form action="{{ url_for('reset_board') }}" method="post"><button class="btn btn-sm btn-outline-secondary">Reset game</button></form>
   </div>
-  <section class="category-grid mb-4">
-    {% for category in game.categories %}
-      <a href="{{ url_for('category_slide', category_id=category.id, slide_number=1) }}" class="category-tile {{ 'picked' if category.picked }}">
-        <span class="small text-uppercase">Category {{ loop.index }}</span>
-        <strong>{{ category.name }}</strong>
-      </a>
+  {% set groups = [('Easy', '100', 0, 3), ('Medium', '200', 3, 6), ('Hard', '300', 6, 9), ('Impossible', '400', 9, 12)] %}
+  <section class="difficulty-board mb-4">
+    {% for difficulty, points, start, end in groups %}
+      <div class="difficulty-column">
+        <header class="difficulty-header"><strong>{{ difficulty }}</strong><span>{{ points }} points</span></header>
+        <div class="difficulty-categories">
+          {% for category in game.categories[start:end] %}
+            <a href="{{ url_for('category_slide', category_id=category.id, slide_number=1) }}" class="category-tile {{ 'picked' if category.picked }}">
+              <span class="small text-uppercase">{{ difficulty }} {{ category.id }}</span>
+              <strong>{{ category.name }}</strong>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
     {% endfor %}
   </section>
   <section class="row g-3 justify-content-center">
