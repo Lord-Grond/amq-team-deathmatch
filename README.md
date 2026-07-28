@@ -22,5 +22,7 @@ Open `http://127.0.0.1:5000`.
 - Music can use chosen start and end points or a new random 20-second sample each time.
 - Each category keeps a separate two-team score with +1 and +0.5 controls.
 - Game data is saved in `data/game.json`.
+- The Loadouts page creates, switches, duplicates, and deletes independent games without copying the app.
+- Existing `data/game.json` content is automatically migrated into the first loadout.
 
 For local audio, place files under `static/audio/` and enter paths such as `/static/audio/my-song.mp3` in edit mode.

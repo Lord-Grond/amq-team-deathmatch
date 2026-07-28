@@ -45,3 +45,5 @@ flask-*.log
 __pycache__/
 *.pyc
 static/uploads/
+data/loadouts/
+data/active_loadout.txt

@@ -10,9 +10,13 @@
 <body>
   <nav class="navbar navbar-dark bg-dark border-bottom border-secondary px-4">
     <a class="navbar-brand fw-bold" href="{{ url_for('board') }}">{{ game.title }}</a>
-    <div class="btn-group" role="group" aria-label="Application mode">
-      <a class="btn btn-sm {{ 'btn-warning' if mode == 'play' else 'btn-outline-light' }}" href="{{ url_for('board') }}">Playing mode</a>
-      <a class="btn btn-sm {{ 'btn-warning' if mode == 'edit' else 'btn-outline-light' }}" href="{{ url_for('edit_board') }}">Edit mode</a>
+    <div class="d-flex gap-2 align-items-center">
+      <span class="active-loadout d-none d-lg-inline">{{ active_loadout_key }}</span>
+      <div class="btn-group" role="group" aria-label="Application mode">
+        <a class="btn btn-sm {{ 'btn-warning' if mode == 'play' else 'btn-outline-light' }}" href="{{ url_for('board') }}">Playing mode</a>
+        <a class="btn btn-sm {{ 'btn-warning' if mode == 'edit' else 'btn-outline-light' }}" href="{{ url_for('edit_board') }}">Edit mode</a>
+        <a class="btn btn-sm {{ 'btn-warning' if mode == 'loadouts' else 'btn-outline-light' }}" href="{{ url_for('loadouts') }}">Loadouts</a>
+      </div>
     </div>
   </nav>
   {% block content %}{% endblock %}

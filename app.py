@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from uuid import uuid4
 
@@ -10,6 +11,8 @@ from werkzeug.utils import secure_filename
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_FILE = BASE_DIR / "data" / "game.json"
+LOADOUT_DIR = BASE_DIR / "data" / "loadouts"
+ACTIVE_LOADOUT_FILE = BASE_DIR / "data" / "active_loadout.txt"
 UPLOAD_DIR = BASE_DIR / "static" / "uploads"
 ALLOWED_AUDIO = {"mp3", "wav", "ogg", "m4a", "aac", "flac"}
 ALLOWED_IMAGES = {"png", "jpg", "jpeg", "gif", "webp"}
@@ -18,9 +21,7 @@ app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024
 
 
-def load_game() -> dict:
-    with DATA_FILE.open("r", encoding="utf-8") as file:
-        game = json.load(file)
+def normalize_game(game: dict) -> dict:
     for category in game["categories"]:
         category.setdefault("explanation", "Add a short explanation for this category in edit mode.")
         category.setdefault("image_url", "")
@@ -32,12 +33,135 @@ def load_game() -> dict:
     return game
 
 
-def save_game(game: dict) -> None:
-    DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    temporary = DATA_FILE.with_suffix(".tmp")
+def write_json(path: Path, game: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(".tmp")
     with temporary.open("w", encoding="utf-8") as file:
         json.dump(game, file, indent=2, ensure_ascii=False)
-    temporary.replace(DATA_FILE)
+    temporary.replace(path)
+
+
+def ensure_loadout_storage() -> None:
+    LOADOUT_DIR.mkdir(parents=True, exist_ok=True)
+    loadout_files = sorted(LOADOUT_DIR.glob("*.json"))
+    if not loadout_files:
+        with DATA_FILE.open("r", encoding="utf-8") as file:
+            legacy_game = normalize_game(json.load(file))
+        first_path = LOADOUT_DIR / "original-game.json"
+        write_json(first_path, legacy_game)
+        loadout_files = [first_path]
+    active_key = ACTIVE_LOADOUT_FILE.read_text(encoding="utf-8").strip() if ACTIVE_LOADOUT_FILE.exists() else ""
+    if not active_key or not (LOADOUT_DIR / f"{active_key}.json").is_file():
+        ACTIVE_LOADOUT_FILE.write_text(loadout_files[0].stem, encoding="utf-8")
+
+
+def active_loadout_key() -> str:
+    ensure_loadout_storage()
+    return ACTIVE_LOADOUT_FILE.read_text(encoding="utf-8").strip()
+
+
+def loadout_path(key: str) -> Path:
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,79}", key):
+        abort(404)
+    path = LOADOUT_DIR / f"{key}.json"
+    if not path.is_file():
+        abort(404)
+    return path
+
+
+def load_game() -> dict:
+    with loadout_path(active_loadout_key()).open("r", encoding="utf-8") as file:
+        return normalize_game(json.load(file))
+
+
+def save_game(game: dict) -> None:
+    write_json(loadout_path(active_loadout_key()), game)
+
+
+def list_loadouts() -> list[dict]:
+    ensure_loadout_storage()
+    active = active_loadout_key()
+    loadouts = []
+    for path in sorted(LOADOUT_DIR.glob("*.json")):
+        try:
+            with path.open("r", encoding="utf-8") as file:
+                game = normalize_game(json.load(file))
+            loadouts.append({"key": path.stem, "title": game.get("title", path.stem), "active": path.stem == active})
+        except (json.JSONDecodeError, OSError):
+            continue
+    return loadouts
+
+
+def reset_play_state(game: dict) -> None:
+    for category in game["categories"]:
+        category["picked"] = False
+        category["scores"] = [0, 0]
+    for team in game["teams"]:
+        team["score"] = 0
+
+
+def unique_loadout_key(title: str) -> str:
+    base = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:60] or "new-loadout"
+    candidate = base
+    number = 2
+    while (LOADOUT_DIR / f"{candidate}.json").exists():
+        candidate = f"{base}-{number}"
+        number += 1
+    return candidate
+
+
+@app.context_processor
+def loadout_context():
+    return {"active_loadout_key": active_loadout_key()}
+
+
+@app.get("/loadouts")
+def loadouts():
+    return render_template("loadouts.html", game=load_game(), loadouts=list_loadouts(), mode="loadouts")
+
+
+@app.post("/loadouts/create")
+def create_loadout():
+    title = request.form.get("title", "").strip() or "New Game"
+    game = json.loads(json.dumps(load_game()))
+    game["title"] = title
+    reset_play_state(game)
+    key = unique_loadout_key(title)
+    write_json(LOADOUT_DIR / f"{key}.json", game)
+    ACTIVE_LOADOUT_FILE.write_text(key, encoding="utf-8")
+    return redirect(url_for("edit_board"))
+
+
+@app.post("/loadouts/<key>/activate")
+def activate_loadout(key: str):
+    loadout_path(key)
+    ACTIVE_LOADOUT_FILE.write_text(key, encoding="utf-8")
+    return redirect(url_for("board"))
+
+
+@app.post("/loadouts/<key>/duplicate")
+def duplicate_loadout(key: str):
+    with loadout_path(key).open("r", encoding="utf-8") as file:
+        game = normalize_game(json.load(file))
+    game["title"] = f"{game['title']} Copy"
+    reset_play_state(game)
+    new_key = unique_loadout_key(game["title"])
+    write_json(LOADOUT_DIR / f"{new_key}.json", game)
+    ACTIVE_LOADOUT_FILE.write_text(new_key, encoding="utf-8")
+    return redirect(url_for("edit_board"))
+
+
+@app.post("/loadouts/<key>/delete")
+def delete_loadout(key: str):
+    path = loadout_path(key)
+    remaining = [item for item in LOADOUT_DIR.glob("*.json") if item != path]
+    if not remaining:
+        abort(400, description="At least one loadout must remain")
+    was_active = key == active_loadout_key()
+    path.unlink()
+    if was_active:
+        ACTIVE_LOADOUT_FILE.write_text(sorted(remaining)[0].stem, encoding="utf-8")
+    return redirect(url_for("loadouts"))
 
 
 def get_category(game: dict, category_id: int) -> dict:
@@ -128,11 +252,7 @@ def complete_category(category_id: int):
 @app.post("/reset-board")
 def reset_board():
     game = load_game()
-    for category in game["categories"]:
-        category["picked"] = False
-        category["scores"] = [0, 0]
-    for team in game["teams"]:
-        team["score"] = 0
+    reset_play_state(game)
     save_game(game)
     return redirect(url_for("board"))
 

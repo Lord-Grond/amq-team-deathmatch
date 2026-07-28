@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container py-4 loadouts-page">
+  <div class="mb-4"><h1 class="fw-bold">Game loadouts</h1><p class="text-secondary">Each loadout is a separate gameshow. Creating a loadout copies the current one so you can use it as a starting template.</p></div>
+  <section class="card bg-dark text-light border-secondary mb-4"><div class="card-body">
+    <form action="{{ url_for('create_loadout') }}" method="post" class="row g-2 align-items-end">
+      <div class="col-md"><label class="form-label">New loadout name</label><input class="form-control" name="title" placeholder="Summer 2026" required></div>
+      <div class="col-md-auto"><button class="btn btn-warning">Create from current loadout</button></div>
+    </form>
+  </div></section>
+  <div class="loadout-list">
+    {% for loadout in loadouts %}
+      <article class="loadout-card {{ 'current' if loadout.active }}">
+        <div><span>{{ 'CURRENT LOADOUT' if loadout.active else 'SAVED LOADOUT' }}</span><h2>{{ loadout.title }}</h2><small>{{ loadout.key }}</small></div>
+        <div class="loadout-actions">
+          {% if not loadout.active %}<form action="{{ url_for('activate_loadout', key=loadout.key) }}" method="post"><button class="btn btn-warning">Use loadout</button></form>{% endif %}
+          <form action="{{ url_for('duplicate_loadout', key=loadout.key) }}" method="post"><button class="btn btn-outline-light">Duplicate</button></form>
+          {% if loadouts|length > 1 %}<form action="{{ url_for('delete_loadout', key=loadout.key) }}" method="post" onsubmit="return confirm('Delete this loadout?')"><button class="btn btn-outline-danger">Delete</button></form>{% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}

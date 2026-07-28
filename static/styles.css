@@ -1,5 +1,6 @@
 :root { --board-blue:#1f3f6c; --board-red:#a52a2a; --gold:#ffc107; }
 body { background:#11151b; color:#f8f9fa; min-height:100vh; }
+.active-loadout { color:#adb5bd; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; }
 .board-page { max-width:1400px; }
 .difficulty-board { display:grid; grid-template-columns:repeat(4,1fr); border-top:3px solid #080808; border-left:3px solid #080808; }
 .difficulty-column { border-right:3px solid #080808; }
@@ -44,5 +45,14 @@ body { background:#11151b; color:#f8f9fa; min-height:100vh; }
 .edit-image-preview { max-width:280px; max-height:180px; object-fit:contain; border:1px solid #6c757d; }
 .sample-picker { background:#222831; border:1px solid #495057; border-radius:.35rem; }
 .slide-footer { border-top:2px solid rgba(255,255,255,.3); padding-top:20px; }
+.loadout-list { display:grid; gap:12px; }
+.loadout-card { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:20px; background:#20252c; border:1px solid #495057; border-left:5px solid #495057; border-radius:.35rem; }
+.loadout-card.current { border-left-color:var(--gold); }
+.loadout-card span { color:var(--gold); font-size:.68rem; font-weight:700; letter-spacing:.12em; }
+.loadout-card h2 { margin:4px 0 0; font-size:1.35rem; }
+.loadout-card small { color:#8d959d; }
+.loadout-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.loadout-actions form { margin:0; }
 @media(max-width:900px){.difficulty-board{grid-template-columns:repeat(2,1fr)}.difficulty-column:nth-child(2){border-right:3px solid #080808}.category-tile{min-height:120px}.slide-page{padding:22px}.navbar-brand{font-size:1rem}.slide-header{align-items:flex-start;flex-wrap:wrap;gap:12px}.slide-header h1{font-size:1.2rem}.category-scorebar{order:3;width:100%}.category-team-score{flex:1;min-width:0}.slide-header>.text-end{margin-left:auto}}
 @media(max-width:520px){.difficulty-board{grid-template-columns:1fr}.difficulty-column{border-right:3px solid #080808}.difficulty-edit-label{width:78px;flex-basis:78px}.list-group-item{flex-wrap:wrap}.list-group-item .form-control{width:calc(100% - 95px)}}
+@media(max-width:650px){.loadout-card{align-items:flex-start;flex-direction:column}.navbar{gap:10px}.navbar-brand{width:100%}.navbar .d-flex{width:100%}.navbar .btn-group{width:100%}.navbar .btn{flex:1}}
