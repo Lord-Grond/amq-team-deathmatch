@@ -24,14 +24,11 @@
       <h2>{{ category.name }}</h2>
       <p class="category-explanation">{{ category.explanation }}</p>
     {% elif slide_type == 'music' %}
-      <div class="music-symbol">♫</div>
-      <h2>Listen to the sample</h2>
       {% if song.audio_url %}
-        <audio id="sample-player" controls preload="metadata" src="{{ song.audio_url }}" data-mode="{{ song.sample_mode }}" data-start="{{ song.sample_start }}"></audio>
-        <button id="sample-button" class="btn btn-warning btn-lg mt-3">Play 20-second sample</button>
-        <p id="sample-status" class="sample-status"></p>
+        <audio id="sample-player" preload="metadata" src="{{ song.audio_url }}" data-mode="{{ song.sample_mode }}" data-start="{{ song.sample_start }}" data-end="{{ song.sample_end }}"></audio>
+        <button id="sample-button" class="sample-play-button" aria-label="Play sample"><span>▶</span><small>PLAY SAMPLE</small></button>
       {% else %}
-        <p class="text-light-emphasis">No audio has been added yet.</p>
+        <button class="sample-play-button disabled" disabled aria-label="No audio added"><span>▶</span><small>NO AUDIO</small></button>
       {% endif %}
     {% else %}
       <span class="answer-label">ANSWER</span>
@@ -53,17 +50,30 @@
 <script>
   const player = document.getElementById("sample-player");
   const button = document.getElementById("sample-button");
-  const status = document.getElementById("sample-status");
   let stopTimer;
   button.addEventListener("click", async () => {
     if (!Number.isFinite(player.duration)) return;
+    if (!player.paused) {
+      clearTimeout(stopTimer);
+      player.pause();
+      button.querySelector("span").textContent = "▶";
+      button.querySelector("small").textContent = "PLAY SAMPLE";
+      return;
+    }
     clearTimeout(stopTimer);
     const latestStart = Math.max(0, player.duration - 20);
-    const start = player.dataset.mode === "random" ? Math.random() * latestStart : Math.min(Number(player.dataset.start) || 0, latestStart);
+    const start = player.dataset.mode === "random" ? Math.random() * latestStart : Math.min(Number(player.dataset.start) || 0, player.duration);
+    const configuredEnd = Math.min(Number(player.dataset.end) || start + 20, player.duration);
+    const end = player.dataset.mode === "random" ? Math.min(start + 20, player.duration) : Math.max(start, configuredEnd);
     player.currentTime = start;
     await player.play();
-    status.textContent = `Playing ${start.toFixed(1)}s – ${Math.min(start + 20, player.duration).toFixed(1)}s`;
-    stopTimer = setTimeout(() => { player.pause(); status.textContent += " · finished"; }, 20000);
+    button.querySelector("span").textContent = "■";
+    button.querySelector("small").textContent = "STOP SAMPLE";
+    stopTimer = setTimeout(() => {
+      player.pause();
+      button.querySelector("span").textContent = "▶";
+      button.querySelector("small").textContent = "PLAY SAMPLE";
+    }, Math.max(0, end - start) * 1000);
   });
 </script>
 {% endif %}

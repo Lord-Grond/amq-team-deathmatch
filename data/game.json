@@ -22,7 +22,8 @@
           "song": "Hyori Ittai",
           "artist": "Yuzu",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -30,7 +31,8 @@
           "song": "COLORS",
           "artist": "FLOW",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -38,7 +40,8 @@
           "song": "STYX HELIX",
           "artist": "MYTH & ROID",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -46,7 +49,8 @@
           "song": "Fukashigi no Karte",
           "artist": "Mai Sakurajima et al.",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -54,7 +58,8 @@
           "song": "VORACITY",
           "artist": "MYTH & ROID",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -75,7 +80,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -83,7 +89,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -91,7 +98,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -99,7 +107,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -107,7 +116,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -128,7 +138,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -136,7 +147,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -144,7 +156,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -152,7 +165,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -160,7 +174,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -181,7 +196,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -189,7 +205,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -197,7 +214,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -205,7 +223,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -213,7 +232,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -234,7 +254,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -242,7 +263,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -250,7 +272,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -258,7 +281,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -266,7 +290,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -287,7 +312,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -295,7 +321,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -303,7 +330,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -311,7 +339,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -319,7 +348,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -340,7 +370,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -348,7 +379,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -356,7 +388,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -364,7 +397,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -372,7 +406,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -393,7 +428,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -401,7 +437,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -409,7 +446,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -417,7 +455,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -425,7 +464,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -446,7 +486,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -454,7 +495,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -462,7 +504,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -470,7 +513,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -478,7 +522,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -499,7 +544,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -507,7 +553,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -515,7 +562,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -523,7 +571,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -531,7 +580,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -552,7 +602,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -560,7 +611,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -568,7 +620,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -576,7 +629,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -584,7 +638,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",
@@ -605,7 +660,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -613,7 +669,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -621,7 +678,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -629,7 +687,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         },
         {
           "audio_url": "",
@@ -637,7 +696,8 @@
           "song": "Song title",
           "artist": "Artist",
           "sample_mode": "fixed",
-          "sample_start": 0
+          "sample_start": 0,
+          "sample_end": 20
         }
       ],
       "explanation": "Add a short explanation for this category in edit mode.",

@@ -28,6 +28,7 @@ def load_game() -> dict:
         for song in category["songs"]:
             song.setdefault("sample_mode", "fixed")
             song.setdefault("sample_start", 0)
+            song.setdefault("sample_end", song["sample_start"] + 20)
     return game
 
 
@@ -173,6 +174,12 @@ def edit_category(category_id: int):
                 song["sample_start"] = max(0, float(request.form.get(f"sample_start_{index}", 0)))
             except ValueError:
                 song["sample_start"] = 0
+            try:
+                song["sample_end"] = max(0, float(request.form.get(f"sample_end_{index}", song["sample_start"] + 20)))
+            except ValueError:
+                song["sample_end"] = song["sample_start"] + 20
+            if song["sample_end"] <= song["sample_start"]:
+                song["sample_end"] = song["sample_start"] + 20
         save_game(game)
         return redirect(url_for("edit_category", category_id=category_id))
     return render_template("category_edit.html", game=game, category=category, mode="edit")
