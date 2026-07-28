@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="slide-page container-fluid">
+  <header class="slide-header">
+    <div><span>Category</span><h1>{{ category.name }}</h1></div>
+    <div class="text-end"><span>Song {{ song_number }} of 5</span><p>Slide {{ slide_number }} of 10</p></div>
+  </header>
+  <section class="slide-content">
+    {% if slide_type == 'music' %}
+      <div class="music-symbol">♫</div>
+      <h2>Listen to the sample</h2>
+      {% if song.audio_url %}
+        <audio controls autoplay src="{{ song.audio_url }}"></audio>
+      {% else %}
+        <p class="text-secondary">No audio URL has been added yet.</p>
+      {% endif %}
+    {% else %}
+      <span class="answer-label">ANSWER</span>
+      <h2>{{ song.anime }}</h2>
+      <p class="song-title">{{ song.song }}</p>
+      <p class="artist">{{ song.artist }}</p>
+    {% endif %}
+  </section>
+  <footer class="slide-footer">
+    {% if slide_number > 1 %}<a class="btn btn-outline-light btn-lg" href="{{ url_for('category_slide', category_id=category.id, slide_number=slide_number-1) }}">← Previous</a>{% else %}<span></span>{% endif %}
+    {% if slide_number < 10 %}
+      <a class="btn btn-warning btn-lg" href="{{ url_for('category_slide', category_id=category.id, slide_number=slide_number+1) }}">Next →</a>
+    {% else %}
+      <form action="{{ url_for('complete_category', category_id=category.id) }}" method="post"><button class="btn btn-danger btn-lg">Return to board</button></form>
+    {% endif %}
+  </footer>
+</main>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container py-4">
+  <a href="{{ url_for('edit_board') }}" class="text-warning text-decoration-none">← Back to board editor</a>
+  <h1 class="fw-bold mt-3">Edit category</h1>
+  <p class="text-secondary">Each song creates two playing-mode slides: music first, then its answer.</p>
+  <form method="post">
+    <div class="card bg-dark text-light border-secondary mb-4"><div class="card-body"><label class="form-label">Category name</label><input class="form-control" name="name" value="{{ category.name }}"></div></div>
+    {% for song in category.songs %}
+      <section class="card bg-dark text-light border-secondary mb-3"><div class="card-header border-secondary fw-bold">Song {{ loop.index }} · Slides {{ loop.index * 2 - 1 }} and {{ loop.index * 2 }}</div><div class="card-body">
+        <label class="form-label">Audio URL or local static path</label><input class="form-control mb-3" name="audio_url_{{ loop.index0 }}" value="{{ song.audio_url }}" placeholder="/static/audio/song-1.mp3">
+        <div class="row g-3"><div class="col-md-5"><label class="form-label">Anime</label><input class="form-control" name="anime_{{ loop.index0 }}" value="{{ song.anime }}"></div><div class="col-md-4"><label class="form-label">Song</label><input class="form-control" name="song_{{ loop.index0 }}" value="{{ song.song }}"></div><div class="col-md-3"><label class="form-label">Artist</label><input class="form-control" name="artist_{{ loop.index0 }}" value="{{ song.artist }}"></div></div>
+      </div></section>
+    {% endfor %}
+    <button class="btn btn-warning btn-lg">Save category</button>
+  </form>
+</main>
+{% endblock %}

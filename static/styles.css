@@ -1,0 +1,29 @@
+:root { --board-blue:#1f3f6c; --board-red:#a52a2a; --gold:#ffc107; }
+body { background:#11151b; color:#f8f9fa; min-height:100vh; }
+.board-page { max-width:1400px; }
+.category-grid { display:grid; grid-template-columns:repeat(4,1fr); border-top:3px solid #080808; border-left:3px solid #080808; }
+.category-tile { min-height:145px; padding:18px; display:flex; flex-direction:column; justify-content:space-between; background:var(--board-blue); color:white; text-decoration:none; border-right:3px solid #080808; border-bottom:3px solid #080808; transition:.15s ease; }
+.category-tile:hover { color:white; filter:brightness(1.2); transform:translateY(-2px); }
+.category-tile span { color:#b9c8da; letter-spacing:.1em; }
+.category-tile strong { font-size:clamp(1rem,2vw,1.65rem); line-height:1.1; text-align:center; margin:auto 0; }
+.category-tile.picked { background:var(--board-red); opacity:.75; }
+.score-card { padding:20px; background:#e9ecef; color:#212529; text-align:center; border-radius:.35rem; }
+.score-card h2 { font-size:1.25rem; }
+.score-row { display:flex; justify-content:center; align-items:center; gap:25px; }
+.score-row strong { font-size:3rem; min-width:80px; }
+.score-button { width:48px; height:48px; border:0; border-radius:50%; background:#1f3f6c; color:white; font-size:1.8rem; line-height:1; }
+.slide-page { min-height:calc(100vh - 57px); display:flex; flex-direction:column; padding:30px 5vw; background:var(--board-blue); }
+.slide-header,.slide-footer { display:flex; align-items:center; justify-content:space-between; }
+.slide-header { border-bottom:2px solid rgba(255,255,255,.3); padding-bottom:16px; }
+.slide-header span { color:#bacbe0; text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; }
+.slide-header h1 { margin:3px 0 0; font-size:1.7rem; }
+.slide-header p { margin:3px 0 0; color:#bacbe0; }
+.slide-content { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:35px 10px; }
+.slide-content h2 { font-size:clamp(2.3rem,6vw,5rem); font-weight:700; max-width:1100px; }
+.music-symbol { font-size:8rem; line-height:1; color:var(--gold); }
+.slide-content audio { width:min(650px,90vw); margin-top:28px; }
+.answer-label { color:var(--gold); font-weight:700; letter-spacing:.2em; margin-bottom:20px; }
+.song-title { font-size:clamp(1.6rem,3vw,2.8rem); margin:14px 0 0; }
+.artist { font-size:1.3rem; color:#bacbe0; }
+.slide-footer { border-top:2px solid rgba(255,255,255,.3); padding-top:20px; }
+@media(max-width:800px){.category-grid{grid-template-columns:repeat(2,1fr)}.category-tile{min-height:120px}.slide-page{padding:22px}.navbar-brand{font-size:1rem}.slide-header h1{font-size:1.2rem}}

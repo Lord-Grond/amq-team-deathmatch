@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container py-4">
+  <div class="mb-4"><h1 class="fw-bold">Edit board</h1><p class="text-secondary">Change the game title, teams, or category names. Open a category to edit its five music and answer pairs.</p></div>
+  <form action="{{ url_for('update_board') }}" method="post">
+    <div class="card bg-dark text-light border-secondary mb-4"><div class="card-body">
+      <label class="form-label">Game title</label><input class="form-control mb-3" name="title" value="{{ game.title }}">
+      <div class="row g-3">{% for team in game.teams %}<div class="col-md-6"><label class="form-label">Team {{ loop.index }}</label><input class="form-control" name="team_{{ loop.index0 }}" value="{{ team.name }}"></div>{% endfor %}</div>
+    </div></div>
+    <div class="list-group mb-3">
+      {% for category in game.categories %}
+        <div class="list-group-item bg-dark text-light border-secondary d-flex gap-3 align-items-center"><span class="text-secondary">{{ '%02d'|format(loop.index) }}</span><input class="form-control" name="category_{{ category.id }}" value="{{ category.name }}"><a class="btn btn-outline-warning text-nowrap" href="{{ url_for('edit_category', category_id=category.id) }}">Edit slides</a></div>
+      {% endfor %}
+    </div>
+    <button class="btn btn-warning">Save board</button>
+  </form>
+</main>
+{% endblock %}

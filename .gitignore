@@ -41,3 +41,6 @@ next-env.d.ts
 /outputs/
 /work/
 dev-*.log
+flask-*.log
+__pycache__/
+*.pyc
