@@ -66,12 +66,13 @@ def board():
     return render_template("board.html", game=load_game(), mode="play")
 
 
-@app.post("/score/<int:team_index>/<int:change>")
-def change_score(team_index: int, change: int):
-    if team_index not in (0, 1) or change not in (-1, 1):
+@app.post("/score/<int:team_index>/<change>")
+def change_score(team_index: int, change: str):
+    changes = {"-1": -1, "1": 1}
+    if team_index not in (0, 1) or change not in changes:
         abort(400)
     game = load_game()
-    game["teams"][team_index]["score"] = max(0, game["teams"][team_index]["score"] + change)
+    game["teams"][team_index]["score"] = max(0, game["teams"][team_index]["score"] + changes[change])
     save_game(game)
     return redirect(url_for("board"))
 
