@@ -27,9 +27,9 @@
         <div class="score-card">
           <h2>{{ team.name }}</h2>
           <div class="score-row">
-            <form action="{{ url_for('change_score', team_index=loop.index0, change=-1) }}" method="post"><button class="score-button">−</button></form>
+            <form action="{{ url_for('change_score', team_index=loop.index0, action='decrease') }}" method="post"><button class="score-button">−</button></form>
             <strong>{{ team.score }}</strong>
-            <form action="{{ url_for('change_score', team_index=loop.index0, change=1) }}" method="post"><button class="score-button">+</button></form>
+            <form action="{{ url_for('change_score', team_index=loop.index0, action='increase') }}" method="post"><button class="score-button">+</button></form>
           </div>
         </div>
       </div>
