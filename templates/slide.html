@@ -3,16 +3,35 @@
 <main class="slide-page container-fluid">
   <header class="slide-header">
     <div><span>Category</span><h1>{{ category.name }}</h1></div>
-    <div class="text-end"><span>Song {{ song_number }} of 5</span><p>Slide {{ slide_number }} of 10</p></div>
+    <div class="category-scorebar">
+      {% for team in game.teams %}
+        <div class="category-team-score">
+          <span>{{ team.name }}</span>
+          <strong>{{ '%g'|format(category.scores[loop.index0]) }}</strong>
+          <div class="btn-group btn-group-sm">
+            <form action="{{ url_for('change_category_score', category_id=category.id, team_index=loop.index0, change='0.5') }}" method="post"><input type="hidden" name="slide_number" value="{{ slide_number }}"><button class="btn btn-outline-light">+0.5</button></form>
+            <form action="{{ url_for('change_category_score', category_id=category.id, team_index=loop.index0, change='1') }}" method="post"><input type="hidden" name="slide_number" value="{{ slide_number }}"><button class="btn btn-warning">+1</button></form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="text-end"><span>{% if slide_type == 'intro' %}Introduction{% else %}Song {{ song_number }} of 5{% endif %}</span><p>Slide {{ slide_number }} of 11</p></div>
   </header>
-  <section class="slide-content">
-    {% if slide_type == 'music' %}
+  <section class="slide-content {{ 'intro-slide' if slide_type == 'intro' }}">
+    {% if slide_type == 'intro' %}
+      {% if category.image_url %}<img class="category-image" src="{{ category.image_url }}" alt="{{ category.name }}">{% endif %}
+      <span class="answer-label">HOW IT WORKS</span>
+      <h2>{{ category.name }}</h2>
+      <p class="category-explanation">{{ category.explanation }}</p>
+    {% elif slide_type == 'music' %}
       <div class="music-symbol">♫</div>
       <h2>Listen to the sample</h2>
       {% if song.audio_url %}
-        <audio controls autoplay src="{{ song.audio_url }}"></audio>
+        <audio id="sample-player" controls preload="metadata" src="{{ song.audio_url }}" data-mode="{{ song.sample_mode }}" data-start="{{ song.sample_start }}"></audio>
+        <button id="sample-button" class="btn btn-warning btn-lg mt-3">Play 20-second sample</button>
+        <p id="sample-status" class="sample-status"></p>
       {% else %}
-        <p class="text-secondary">No audio URL has been added yet.</p>
+        <p class="text-light-emphasis">No audio has been added yet.</p>
       {% endif %}
     {% else %}
       <span class="answer-label">ANSWER</span>
@@ -23,11 +42,29 @@
   </section>
   <footer class="slide-footer">
     {% if slide_number > 1 %}<a class="btn btn-outline-light btn-lg" href="{{ url_for('category_slide', category_id=category.id, slide_number=slide_number-1) }}">← Previous</a>{% else %}<span></span>{% endif %}
-    {% if slide_number < 10 %}
+    {% if slide_number < 11 %}
       <a class="btn btn-warning btn-lg" href="{{ url_for('category_slide', category_id=category.id, slide_number=slide_number+1) }}">Next →</a>
     {% else %}
       <form action="{{ url_for('complete_category', category_id=category.id) }}" method="post"><button class="btn btn-danger btn-lg">Return to board</button></form>
     {% endif %}
   </footer>
 </main>
+{% if slide_type == 'music' and song.audio_url %}
+<script>
+  const player = document.getElementById("sample-player");
+  const button = document.getElementById("sample-button");
+  const status = document.getElementById("sample-status");
+  let stopTimer;
+  button.addEventListener("click", async () => {
+    if (!Number.isFinite(player.duration)) return;
+    clearTimeout(stopTimer);
+    const latestStart = Math.max(0, player.duration - 20);
+    const start = player.dataset.mode === "random" ? Math.random() * latestStart : Math.min(Number(player.dataset.start) || 0, latestStart);
+    player.currentTime = start;
+    await player.play();
+    status.textContent = `Playing ${start.toFixed(1)}s – ${Math.min(start + 20, player.duration).toFixed(1)}s`;
+    stopTimer = setTimeout(() => { player.pause(); status.textContent += " · finished"; }, 20000);
+  });
+</script>
+{% endif %}
 {% endblock %}

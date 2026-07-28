@@ -18,6 +18,12 @@ body { background:#11151b; color:#f8f9fa; min-height:100vh; }
 .slide-header span { color:#bacbe0; text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; }
 .slide-header h1 { margin:3px 0 0; font-size:1.7rem; }
 .slide-header p { margin:3px 0 0; color:#bacbe0; }
+.category-scorebar { display:flex; gap:12px; margin:0 auto; }
+.category-team-score { min-width:170px; background:rgba(0,0,0,.22); padding:8px 10px; display:grid; grid-template-columns:1fr auto; gap:4px 12px; align-items:center; }
+.category-team-score span { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.category-team-score strong { font-size:1.7rem; }
+.category-team-score .btn-group { grid-column:1 / -1; }
+.category-team-score form,.category-team-score button { width:100%; }
 .slide-content { flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:35px 10px; }
 .slide-content h2 { font-size:clamp(2.3rem,6vw,5rem); font-weight:700; max-width:1100px; }
 .music-symbol { font-size:8rem; line-height:1; color:var(--gold); }
@@ -25,5 +31,10 @@ body { background:#11151b; color:#f8f9fa; min-height:100vh; }
 .answer-label { color:var(--gold); font-weight:700; letter-spacing:.2em; margin-bottom:20px; }
 .song-title { font-size:clamp(1.6rem,3vw,2.8rem); margin:14px 0 0; }
 .artist { font-size:1.3rem; color:#bacbe0; }
+.category-image { max-width:min(600px,80vw); max-height:36vh; object-fit:contain; margin-bottom:24px; border:3px solid rgba(255,255,255,.25); }
+.category-explanation { max-width:900px; font-size:clamp(1.25rem,2.4vw,2rem); line-height:1.45; color:#e3eaf2; }
+.sample-status { min-height:24px; color:#d5dfeb; margin-top:10px; }
+.edit-image-preview { max-width:280px; max-height:180px; object-fit:contain; border:1px solid #6c757d; }
+.sample-picker { background:#222831; border:1px solid #495057; border-radius:.35rem; }
 .slide-footer { border-top:2px solid rgba(255,255,255,.3); padding-top:20px; }
-@media(max-width:800px){.category-grid{grid-template-columns:repeat(2,1fr)}.category-tile{min-height:120px}.slide-page{padding:22px}.navbar-brand{font-size:1rem}.slide-header h1{font-size:1.2rem}}
+@media(max-width:900px){.category-grid{grid-template-columns:repeat(2,1fr)}.category-tile{min-height:120px}.slide-page{padding:22px}.navbar-brand{font-size:1rem}.slide-header{align-items:flex-start;flex-wrap:wrap;gap:12px}.slide-header h1{font-size:1.2rem}.category-scorebar{order:3;width:100%}.category-team-score{flex:1;min-width:0}.slide-header>.text-end{margin-left:auto}}

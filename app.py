@@ -2,19 +2,33 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from uuid import uuid4
 
 from flask import Flask, abort, redirect, render_template, request, url_for
+from werkzeug.utils import secure_filename
 
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_FILE = BASE_DIR / "data" / "game.json"
+UPLOAD_DIR = BASE_DIR / "static" / "uploads"
+ALLOWED_AUDIO = {"mp3", "wav", "ogg", "m4a", "aac", "flac"}
+ALLOWED_IMAGES = {"png", "jpg", "jpeg", "gif", "webp"}
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024
 
 
 def load_game() -> dict:
     with DATA_FILE.open("r", encoding="utf-8") as file:
-        return json.load(file)
+        game = json.load(file)
+    for category in game["categories"]:
+        category.setdefault("explanation", "Add a short explanation for this category in edit mode.")
+        category.setdefault("image_url", "")
+        category.setdefault("scores", [0, 0])
+        for song in category["songs"]:
+            song.setdefault("sample_mode", "fixed")
+            song.setdefault("sample_start", 0)
+    return game
 
 
 def save_game(game: dict) -> None:
@@ -30,6 +44,20 @@ def get_category(game: dict, category_id: int) -> dict:
     if category is None:
         abort(404)
     return category
+
+
+def save_upload(file, folder: str, allowed_extensions: set[str]) -> str | None:
+    if not file or not file.filename:
+        return None
+    filename = secure_filename(file.filename)
+    extension = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if extension not in allowed_extensions:
+        abort(400, description=f"Unsupported .{extension} file")
+    destination = UPLOAD_DIR / folder
+    destination.mkdir(parents=True, exist_ok=True)
+    saved_name = f"{uuid4().hex}-{filename}"
+    file.save(destination / saved_name)
+    return url_for("static", filename=f"uploads/{folder}/{saved_name}")
 
 
 @app.get("/")
@@ -49,22 +77,41 @@ def change_score(team_index: int, change: int):
 
 @app.get("/category/<int:category_id>/<int:slide_number>")
 def category_slide(category_id: int, slide_number: int):
-    if slide_number < 1 or slide_number > 10:
+    if slide_number < 1 or slide_number > 11:
         abort(404)
     game = load_game()
     category = get_category(game, category_id)
-    song_index = (slide_number - 1) // 2
-    slide_type = "music" if slide_number % 2 else "answer"
+    if slide_number == 1:
+        song_index = None
+        slide_type = "intro"
+        song = None
+    else:
+        song_index = (slide_number - 2) // 2
+        slide_type = "music" if slide_number % 2 == 0 else "answer"
+        song = category["songs"][song_index]
     return render_template(
         "slide.html",
         game=game,
         category=category,
-        song=category["songs"][song_index],
-        song_number=song_index + 1,
+        song=song,
+        song_number=song_index + 1 if song_index is not None else None,
         slide_number=slide_number,
         slide_type=slide_type,
         mode="play",
     )
+
+
+@app.post("/category/<int:category_id>/score/<int:team_index>/<change>")
+def change_category_score(category_id: int, team_index: int, change: str):
+    changes = {"1": 1, "0.5": 0.5}
+    if team_index not in (0, 1) or change not in changes:
+        abort(400)
+    game = load_game()
+    category = get_category(game, category_id)
+    category["scores"][team_index] += changes[change]
+    save_game(game)
+    slide_number = request.form.get("slide_number", "1")
+    return redirect(url_for("category_slide", category_id=category_id, slide_number=slide_number))
 
 
 @app.post("/category/<int:category_id>/complete")
@@ -81,6 +128,7 @@ def reset_board():
     game = load_game()
     for category in game["categories"]:
         category["picked"] = False
+        category["scores"] = [0, 0]
     for team in game["teams"]:
         team["score"] = 0
     save_game(game)
@@ -112,9 +160,19 @@ def edit_category(category_id: int):
     category = get_category(game, category_id)
     if request.method == "POST":
         category["name"] = request.form.get("name", "").strip() or category["name"]
+        category["explanation"] = request.form.get("explanation", "").strip()
+        image_upload = save_upload(request.files.get("image_upload"), "images", ALLOWED_IMAGES)
+        category["image_url"] = image_upload or request.form.get("image_url", "").strip()
         for index, song in enumerate(category["songs"]):
-            for field in ("audio_url", "anime", "song", "artist"):
+            audio_upload = save_upload(request.files.get(f"audio_upload_{index}"), "audio", ALLOWED_AUDIO)
+            song["audio_url"] = audio_upload or request.form.get(f"audio_url_{index}", "").strip()
+            for field in ("anime", "song", "artist"):
                 song[field] = request.form.get(f"{field}_{index}", "").strip()
+            song["sample_mode"] = "random" if request.form.get(f"random_sample_{index}") else "fixed"
+            try:
+                song["sample_start"] = max(0, float(request.form.get(f"sample_start_{index}", 0)))
+            except ValueError:
+                song["sample_start"] = 0
         save_game(game)
         return redirect(url_for("edit_category", category_id=category_id))
     return render_template("category_edit.html", game=game, category=category, mode="edit")

@@ -3,16 +3,41 @@
 <main class="container py-4">
   <a href="{{ url_for('edit_board') }}" class="text-warning text-decoration-none">← Back to board editor</a>
   <h1 class="fw-bold mt-3">Edit category</h1>
-  <p class="text-secondary">Each song creates two playing-mode slides: music first, then its answer.</p>
-  <form method="post">
-    <div class="card bg-dark text-light border-secondary mb-4"><div class="card-body"><label class="form-label">Category name</label><input class="form-control" name="name" value="{{ category.name }}"></div></div>
+  <p class="text-secondary">The introduction is slide 1. Each song then creates a music slide followed by its answer.</p>
+  <form method="post" enctype="multipart/form-data">
+    <section class="card bg-dark text-light border-secondary mb-4"><div class="card-header border-secondary fw-bold">Introduction · Slide 1</div><div class="card-body">
+      <label class="form-label">Category name</label><input class="form-control mb-3" name="name" value="{{ category.name }}">
+      <label class="form-label">Explanation</label><textarea class="form-control mb-3" name="explanation" rows="3">{{ category.explanation }}</textarea>
+      <div class="row g-3"><div class="col-md-6"><label class="form-label">Image URL</label><input class="form-control" name="image_url" value="{{ category.image_url }}" placeholder="https://..."></div><div class="col-md-6"><label class="form-label">Or upload an image</label><input class="form-control" type="file" name="image_upload" accept="image/*"></div></div>
+      {% if category.image_url %}<img class="edit-image-preview mt-3" src="{{ category.image_url }}" alt="Current category image">{% endif %}
+    </div></section>
     {% for song in category.songs %}
-      <section class="card bg-dark text-light border-secondary mb-3"><div class="card-header border-secondary fw-bold">Song {{ loop.index }} · Slides {{ loop.index * 2 - 1 }} and {{ loop.index * 2 }}</div><div class="card-body">
-        <label class="form-label">Audio URL or local static path</label><input class="form-control mb-3" name="audio_url_{{ loop.index0 }}" value="{{ song.audio_url }}" placeholder="/static/audio/song-1.mp3">
+      <section class="card bg-dark text-light border-secondary mb-3 song-editor"><div class="card-header border-secondary fw-bold">Song {{ loop.index }} · Slides {{ loop.index * 2 }} and {{ loop.index * 2 + 1 }}</div><div class="card-body">
+        <div class="row g-3 mb-3"><div class="col-md-6"><label class="form-label">Audio URL</label><input class="form-control audio-url" name="audio_url_{{ loop.index0 }}" value="{{ song.audio_url }}" placeholder="https://... or /static/..."></div><div class="col-md-6"><label class="form-label">Or upload audio</label><input class="form-control" type="file" name="audio_upload_{{ loop.index0 }}" accept="audio/*"></div></div>
+        {% if song.audio_url %}<audio class="editor-audio w-100 mb-3" controls preload="metadata" src="{{ song.audio_url }}"></audio>{% endif %}
+        <div class="sample-picker p-3 mb-3">
+          <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap"><div><label class="form-label mb-1">Sample start</label><div class="input-group"><input class="form-control sample-number" type="number" min="0" step="0.1" name="sample_start_{{ loop.index0 }}" value="{{ song.sample_start }}"><span class="input-group-text">seconds</span></div></div><div class="form-check form-switch"><input class="form-check-input random-toggle" type="checkbox" name="random_sample_{{ loop.index0 }}" id="random_{{ loop.index0 }}" {{ 'checked' if song.sample_mode == 'random' }}><label class="form-check-label" for="random_{{ loop.index0 }}">Use a random 20-second sample</label></div></div>
+          <input class="form-range sample-range mt-3" type="range" min="0" max="300" step="0.1" value="{{ song.sample_start }}">
+          <small class="text-secondary">For a fixed sample, play the audio and move the slider to the point where the 20 seconds should begin.</small>
+        </div>
         <div class="row g-3"><div class="col-md-5"><label class="form-label">Anime</label><input class="form-control" name="anime_{{ loop.index0 }}" value="{{ song.anime }}"></div><div class="col-md-4"><label class="form-label">Song</label><input class="form-control" name="song_{{ loop.index0 }}" value="{{ song.song }}"></div><div class="col-md-3"><label class="form-label">Artist</label><input class="form-control" name="artist_{{ loop.index0 }}" value="{{ song.artist }}"></div></div>
       </div></section>
     {% endfor %}
     <button class="btn btn-warning btn-lg">Save category</button>
   </form>
 </main>
+<script>
+  document.querySelectorAll(".song-editor").forEach((editor) => {
+    const audio = editor.querySelector(".editor-audio");
+    const range = editor.querySelector(".sample-range");
+    const number = editor.querySelector(".sample-number");
+    const random = editor.querySelector(".random-toggle");
+    const syncDisabled = () => { range.disabled = random.checked; number.readOnly = random.checked; };
+    range.addEventListener("input", () => { number.value = range.value; if (audio) audio.currentTime = Number(range.value); });
+    number.addEventListener("input", () => { range.value = number.value || 0; if (audio) audio.currentTime = Number(number.value || 0); });
+    random.addEventListener("change", syncDisabled);
+    if (audio) audio.addEventListener("loadedmetadata", () => { range.max = Math.max(0, audio.duration - 20); });
+    syncDisabled();
+  });
+</script>
 {% endblock %}

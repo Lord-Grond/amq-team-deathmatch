@@ -44,3 +44,4 @@ dev-*.log
 flask-*.log
 __pycache__/
 *.pyc
+static/uploads/
