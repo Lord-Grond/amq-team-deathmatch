@@ -262,6 +262,28 @@ def edit_board():
     return render_template("edit.html", game=load_game(), mode="edit")
 
 
+@app.post("/edit/categories/swap")
+def swap_categories():
+    try:
+        first_id = int(request.form.get("first_category", ""))
+        second_id = int(request.form.get("second_category", ""))
+    except ValueError:
+        abort(400)
+    if first_id == second_id:
+        return redirect(url_for("edit_board"))
+    game = load_game()
+    first = get_category(game, first_id)
+    second = get_category(game, second_id)
+    editable_fields = ("name", "explanation", "image_url", "songs")
+    first_content = {field: first[field] for field in editable_fields}
+    second_content = {field: second[field] for field in editable_fields}
+    for field in editable_fields:
+        first[field] = second_content[field]
+        second[field] = first_content[field]
+    save_game(game)
+    return redirect(url_for("edit_board"))
+
+
 @app.post("/edit/board")
 def update_board():
     game = load_game()

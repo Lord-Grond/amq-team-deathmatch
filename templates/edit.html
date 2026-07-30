@@ -2,6 +2,14 @@
 {% block content %}
 <main class="container py-4">
   <div class="mb-4"><h1 class="fw-bold">Edit board</h1><p class="text-secondary">The difficulty groups and category numbers are fixed. Change the displayed names or open a category to edit its slides.</p></div>
+  <section class="card bg-dark text-light border-secondary mb-4"><div class="card-header border-secondary fw-bold">Swap two categories</div><div class="card-body">
+    <form action="{{ url_for('swap_categories') }}" method="post" class="row g-3 align-items-end">
+      <div class="col-md-5"><label class="form-label">First category</label><select class="form-select" name="first_category" required>{% for category in game.categories %}<option value="{{ category.id }}">{{ category.id }} — {{ category.name }}</option>{% endfor %}</select></div>
+      <div class="col-md-5"><label class="form-label">Second category</label><select class="form-select" name="second_category" required>{% for category in game.categories %}<option value="{{ category.id }}" {{ 'selected' if category.id == 2 }}>{{ category.id }} — {{ category.name }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><button class="btn btn-outline-warning w-100">Swap</button></div>
+    </form>
+    <small class="text-secondary d-block mt-3">This swaps the category name, introduction, image, songs, answers, and sample settings. Difficulty slots and category numbers stay fixed.</small>
+  </div></section>
   <form action="{{ url_for('update_board') }}" method="post">
     <div class="card bg-dark text-light border-secondary mb-4"><div class="card-body">
       <label class="form-label">Game title</label><input class="form-control mb-3" name="title" value="{{ game.title }}">

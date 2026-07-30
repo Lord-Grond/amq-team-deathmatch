@@ -23,6 +23,7 @@ Open `http://127.0.0.1:5000`.
 - Each category keeps a separate two-team score with +1 and +0.5 controls.
 - Game data is saved in `data/game.json`.
 - The Loadouts page creates, switches, duplicates, and deletes independent games without copying the app.
+- Edit mode can swap the complete content of any two numbered category slots.
 - Existing `data/game.json` content is automatically migrated into the first loadout.
 
 For local audio, place files under `static/audio/` and enter paths such as `/static/audio/my-song.mp3` in edit mode.
