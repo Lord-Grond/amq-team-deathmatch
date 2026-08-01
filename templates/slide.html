@@ -58,7 +58,6 @@
   button.addEventListener("click", async () => {
     if (!Number.isFinite(player.duration)) return;
 
-    // Pause
     if (!player.paused) {
       clearTimeout(stopTimer);
       player.pause();
@@ -69,7 +68,6 @@
 
     clearTimeout(stopTimer);
 
-    // Only choose a new sample if we don't already have one
     if (selectedStart === null || selectedEnd === null) {
       const latestStart = Math.max(0, player.duration - 20);
 
@@ -103,7 +101,6 @@
       button.querySelector("span").textContent = "▶";
       button.querySelector("small").textContent = "PLAY SAMPLE";
 
-      // Sample has finished, so the next Play gets a new random sample
       selectedStart = null;
       selectedEnd = null;
     }, Math.max(0, selectedEnd - player.currentTime) * 1000);
