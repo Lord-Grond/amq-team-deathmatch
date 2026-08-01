@@ -50,9 +50,15 @@
 <script>
   const player = document.getElementById("sample-player");
   const button = document.getElementById("sample-button");
+
   let stopTimer;
+  let selectedStart = null;
+  let selectedEnd = null;
+
   button.addEventListener("click", async () => {
     if (!Number.isFinite(player.duration)) return;
+
+    // Pause
     if (!player.paused) {
       clearTimeout(stopTimer);
       player.pause();
@@ -60,20 +66,47 @@
       button.querySelector("small").textContent = "PLAY SAMPLE";
       return;
     }
+
     clearTimeout(stopTimer);
-    const latestStart = Math.max(0, player.duration - 20);
-    const start = player.dataset.mode === "random" ? Math.random() * latestStart : Math.min(Number(player.dataset.start) || 0, player.duration);
-    const configuredEnd = Math.min(Number(player.dataset.end) || start + 20, player.duration);
-    const end = player.dataset.mode === "random" ? Math.min(start + 20, player.duration) : Math.max(start, configuredEnd);
-    player.currentTime = start;
+
+    // Only choose a new sample if we don't already have one
+    if (selectedStart === null || selectedEnd === null) {
+      const latestStart = Math.max(0, player.duration - 20);
+
+      selectedStart = player.dataset.mode === "random"
+        ? Math.random() * latestStart
+        : Math.min(
+            Number(player.dataset.start) || 0,
+            player.duration
+          );
+
+      const configuredEnd = Math.min(
+        Number(player.dataset.end) || selectedStart + 20,
+        player.duration
+      );
+
+      selectedEnd = player.dataset.mode === "random"
+        ? Math.min(selectedStart + 20, player.duration)
+        : Math.max(selectedStart, configuredEnd);
+
+      player.currentTime = selectedStart;
+    }
+
     await player.play();
+
     button.querySelector("span").textContent = "■";
     button.querySelector("small").textContent = "STOP SAMPLE";
+
     stopTimer = setTimeout(() => {
       player.pause();
+
       button.querySelector("span").textContent = "▶";
       button.querySelector("small").textContent = "PLAY SAMPLE";
-    }, Math.max(0, end - start) * 1000);
+
+      // Sample has finished, so the next Play gets a new random sample
+      selectedStart = null;
+      selectedEnd = null;
+    }, Math.max(0, selectedEnd - player.currentTime) * 1000);
   });
 </script>
 {% endif %}
