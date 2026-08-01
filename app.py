@@ -22,11 +22,34 @@ app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024
 
 
 def normalize_game(game: dict) -> dict:
-    for category in game["categories"]:
-        category.setdefault("explanation", "Add a short explanation for this category in edit mode.")
+    game.setdefault("title", "AMQ Team Deathmatch")
+    game.setdefault("teams", [])
+    while len(game["teams"]) < 2:
+        team_number = len(game["teams"]) + 1
+        game["teams"].append({"name": f"Team {team_number}", "score": 0})
+    for team_number, team in enumerate(game["teams"][:2], start=1):
+        team.setdefault("name", f"Team {team_number}")
+        team.setdefault("score", 0)
+
+    game.setdefault("categories", [])
+    while len(game["categories"]) < 12:
+        game["categories"].append({"id": len(game["categories"]) + 1})
+
+    for category_number, category in enumerate(game["categories"], start=1):
+        category.setdefault("id", category_number)
+        category.setdefault("name", f"Category {category_number}")
+        category.setdefault("picked", False)
+        category.setdefault("explanation", "")
         category.setdefault("image_url", "")
         category.setdefault("scores", [0, 0])
+        category.setdefault("songs", [])
+        while len(category["songs"]) < 5:
+            category["songs"].append({})
         for song in category["songs"]:
+            song.setdefault("audio_url", "")
+            song.setdefault("anime", "")
+            song.setdefault("song", "")
+            song.setdefault("artist", "")
             song.setdefault("sample_mode", "fixed")
             song.setdefault("sample_start", 0)
             song.setdefault("sample_end", song["sample_start"] + 20)
