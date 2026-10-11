@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="showdown-page container-fluid">
+  <header class="showdown-header">
+    <div><span>ENDGAME</span><h1>Final Showdown</h1></div>
+    <div class="showdown-scorebar">
+      {% for team in game.teams %}
+        <div class="showdown-team-score">
+          <span>{{ team.name }}</span>
+          <div>
+            <form action="{{ url_for('change_final_showdown_score', team_index=loop.index0, action='decrease') }}" method="post"><button type="submit" aria-label="Subtract one point from {{ team.name }}">−</button></form>
+            <strong>{{ team.score }}</strong>
+            <form action="{{ url_for('change_final_showdown_score', team_index=loop.index0, action='increase') }}" method="post"><button type="submit" aria-label="Add one point to {{ team.name }}">+</button></form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <a class="btn btn-outline-light" href="{{ url_for('board') }}">Return to board</a>
+  </header>
+
+  <section class="showdown-grid" aria-label="Final Showdown songs">
+    {% for song in game.final_showdown.songs %}
+      <article class="showdown-song">
+        <span class="showdown-number">{{ loop.index }}</span>
+        {% if song.audio_url %}
+          <audio class="showdown-audio" preload="metadata" src="{{ song.audio_url }}" data-mode="{{ song.sample_mode }}" data-start="{{ song.sample_start }}" data-end="{{ song.sample_end }}"></audio>
+          <button class="showdown-play" type="button" aria-label="Play song {{ loop.index }} sample"><span>▶</span><small>PLAY</small></button>
+        {% else %}
+          <button class="showdown-play disabled" type="button" disabled><span>▶</span><small>NO AUDIO</small></button>
+        {% endif %}
+        <div class="showdown-answers">
+          {% for field, label in [('anime', 'Anime'), ('song', 'Song'), ('artist', 'Artist')] %}
+            <button class="reveal-field" type="button" aria-expanded="false">
+              <span>{{ label }}</span><strong data-answer="{{ song[field] or 'Not set' }}">Reveal</strong>
+            </button>
+          {% endfor %}
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  <footer class="showdown-theme">
+    <span>THEME</span>
+    <button class="theme-reveal" type="button" aria-expanded="false" data-answer="{{ game.final_showdown.theme or 'Not set' }}">Reveal theme</button>
+  </footer>
+</main>
+<script>
+  document.querySelectorAll(".reveal-field").forEach((button) => {
+    button.addEventListener("click", () => {
+      const answer = button.querySelector("strong");
+      const revealed = button.getAttribute("aria-expanded") === "true";
+      answer.textContent = revealed ? "Reveal" : answer.dataset.answer;
+      button.setAttribute("aria-expanded", String(!revealed));
+    });
+  });
+
+  const themeButton = document.querySelector(".theme-reveal");
+  themeButton.addEventListener("click", () => {
+    const revealed = themeButton.getAttribute("aria-expanded") === "true";
+    themeButton.textContent = revealed ? "Reveal theme" : themeButton.dataset.answer;
+    themeButton.setAttribute("aria-expanded", String(!revealed));
+  });
+
+  document.querySelectorAll(".showdown-song").forEach((card) => {
+    const player = card.querySelector(".showdown-audio");
+    const button = card.querySelector(".showdown-play:not(.disabled)");
+    if (!player || !button) return;
+    let stopTimer;
+    button.addEventListener("click", async () => {
+      if (!Number.isFinite(player.duration)) return;
+      if (!player.paused) {
+        clearTimeout(stopTimer); player.pause();
+        button.querySelector("span").textContent = "▶";
+        button.querySelector("small").textContent = "PLAY";
+        return;
+      }
+      document.querySelectorAll(".showdown-audio").forEach((other) => { if (other !== player) other.pause(); });
+      document.querySelectorAll(".showdown-play:not(.disabled)").forEach((other) => {
+        if (other !== button) { other.querySelector("span").textContent = "▶"; other.querySelector("small").textContent = "PLAY"; }
+      });
+      const latestStart = Math.max(0, player.duration - 20);
+      const start = player.dataset.mode === "random" ? Math.random() * latestStart : Math.min(Number(player.dataset.start) || 0, player.duration);
+      const end = player.dataset.mode === "random" ? Math.min(start + 20, player.duration) : Math.max(start, Math.min(Number(player.dataset.end) || start + 20, player.duration));
+      player.currentTime = start; await player.play();
+      button.querySelector("span").textContent = "■";
+      button.querySelector("small").textContent = "STOP";
+      stopTimer = setTimeout(() => { player.pause(); button.querySelector("span").textContent = "▶"; button.querySelector("small").textContent = "PLAY"; }, Math.max(0, end - player.currentTime) * 1000);
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<main class="container py-4">
+  <a href="{{ url_for('edit_board') }}" class="text-warning text-decoration-none">← Back to board editor</a>
+  <div class="my-4"><h1 class="fw-bold">Edit Final Showdown</h1><p class="text-secondary">Add five songs and the shared theme that connects them.</p></div>
+  <form method="post" enctype="multipart/form-data">
+    <div class="card bg-dark text-light border-warning mb-4"><div class="card-body"><label class="form-label">Final theme</label><input class="form-control" name="theme" value="{{ game.final_showdown.theme }}" placeholder="The connection between all five songs"></div></div>
+    {% for song in game.final_showdown.songs %}
+      <section class="card bg-dark text-light border-secondary mb-3"><div class="card-header border-secondary fw-bold">Song {{ loop.index }}</div><div class="card-body">
+        <div class="row g-3 mb-3"><div class="col-md-6"><label class="form-label">Audio URL</label><input class="form-control" name="audio_url_{{ loop.index0 }}" value="{{ song.audio_url }}" placeholder="https://..."></div><div class="col-md-6"><label class="form-label">Or upload audio</label><input class="form-control" type="file" name="audio_upload_{{ loop.index0 }}" accept="audio/*"></div></div>
+        <div class="row g-3 mb-3"><div class="col-md-4"><label class="form-label">Anime</label><input class="form-control" name="anime_{{ loop.index0 }}" value="{{ song.anime }}"></div><div class="col-md-4"><label class="form-label">Song name</label><input class="form-control" name="song_{{ loop.index0 }}" value="{{ song.song }}"></div><div class="col-md-4"><label class="form-label">Artist</label><input class="form-control" name="artist_{{ loop.index0 }}" value="{{ song.artist }}"></div></div>
+        <div class="row g-3 align-items-end"><div class="col-md-3"><label class="form-label">Sample start (seconds)</label><input class="form-control" type="number" min="0" step="0.1" name="sample_start_{{ loop.index0 }}" value="{{ song.sample_start }}"></div><div class="col-md-3"><label class="form-label">Sample end (seconds)</label><input class="form-control" type="number" min="0" step="0.1" name="sample_end_{{ loop.index0 }}" value="{{ song.sample_end }}"></div><div class="col-md-4"><div class="form-check mb-2"><input class="form-check-input" type="checkbox" name="random_sample_{{ loop.index0 }}" id="random_{{ loop.index0 }}" {{ 'checked' if song.sample_mode == 'random' }}><label class="form-check-label" for="random_{{ loop.index0 }}">Random 20-second sample</label></div></div></div>
+      </div></section>
+    {% endfor %}
+    <button class="btn btn-warning btn-lg">Save Final Showdown</button>
+  </form>
+</main>
+{% endblock %}

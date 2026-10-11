@@ -2,6 +2,10 @@
 {% block content %}
 <main class="container py-4">
   <div class="mb-4"><h1 class="fw-bold">Edit board</h1><p class="text-secondary">The difficulty groups and category numbers are fixed. Change the displayed names or open a category to edit its slides.</p></div>
+  <section class="card bg-dark text-light border-warning mb-4"><div class="card-body d-flex justify-content-between align-items-center gap-3 flex-wrap">
+    <div><span class="text-warning small fw-bold">ENDGAME</span><h2 class="h4 mb-0">Final Showdown</h2></div>
+    <a class="btn btn-warning" href="{{ url_for('edit_final_showdown') }}">Edit Final Showdown</a>
+  </div></section>
   <section class="card bg-dark text-light border-secondary mb-4"><div class="card-header border-secondary fw-bold">Swap two categories</div><div class="card-body">
     <form action="{{ url_for('swap_categories') }}" method="post" class="row g-3 align-items-end">
       <div class="col-md-5"><label class="form-label">First category</label><select class="form-select" name="first_category" required>{% for category in game.categories %}<option value="{{ category.id }}">{{ category.id }} — {{ category.name }}</option>{% endfor %}</select></div>
@@ -15,7 +19,7 @@
       <label class="form-label">Game title</label><input class="form-control mb-3" name="title" value="{{ game.title }}">
       <div class="row g-3">{% for team in game.teams %}<div class="col-md-6"><label class="form-label">Team {{ loop.index }}</label><input class="form-control" name="team_{{ loop.index0 }}" value="{{ team.name }}"></div>{% endfor %}</div>
     </div></div>
-    {% set groups = [('Easy', 0, 3), ('Medium', 3, 6), ('Hard', 6, 9), ('Impossible', 9, 12)] %}
+    {% set groups = [('Easy', 0, 3), ('Medium', 3, 6), ('Hard', 6, 9), ('Mixed', 9, 12)] %}
     {% for difficulty, start, end in groups %}
       <h2 class="h5 mt-4 mb-2 text-warning">{{ difficulty }}</h2>
       <div class="list-group mb-3">

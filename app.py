@@ -53,6 +53,20 @@ def normalize_game(game: dict) -> dict:
             song.setdefault("sample_mode", "fixed")
             song.setdefault("sample_start", 0)
             song.setdefault("sample_end", song["sample_start"] + 20)
+
+    final_showdown = game.setdefault("final_showdown", {})
+    final_showdown.setdefault("theme", "")
+    final_showdown.setdefault("songs", [])
+    while len(final_showdown["songs"]) < 5:
+        final_showdown["songs"].append({})
+    for song in final_showdown["songs"]:
+        song.setdefault("audio_url", "")
+        song.setdefault("anime", "")
+        song.setdefault("song", "")
+        song.setdefault("artist", "")
+        song.setdefault("sample_mode", "fixed")
+        song.setdefault("sample_start", 0)
+        song.setdefault("sample_end", song["sample_start"] + 20)
     return game
 
 
@@ -213,6 +227,22 @@ def board():
     return render_template("board.html", game=load_game(), mode="play")
 
 
+@app.get("/final-showdown")
+def final_showdown():
+    return render_template("final_showdown.html", game=load_game(), mode="play")
+
+
+@app.post("/final-showdown/score/<int:team_index>/<action>")
+def change_final_showdown_score(team_index: int, action: str):
+    changes = {"decrease": -1, "increase": 1}
+    if team_index not in (0, 1) or action not in changes:
+        abort(400)
+    game = load_game()
+    game["teams"][team_index]["score"] = max(0, game["teams"][team_index]["score"] + changes[action])
+    save_game(game)
+    return redirect(url_for("final_showdown"))
+
+
 @app.post("/score/<int:team_index>/<action>")
 def change_score(team_index: int, action: str):
     changes = {"decrease": -1, "increase": 1}
@@ -283,6 +313,33 @@ def reset_board():
 @app.get("/edit")
 def edit_board():
     return render_template("edit.html", game=load_game(), mode="edit")
+
+
+@app.route("/edit/final-showdown", methods=["GET", "POST"])
+def edit_final_showdown():
+    game = load_game()
+    showdown = game["final_showdown"]
+    if request.method == "POST":
+        showdown["theme"] = request.form.get("theme", "").strip()
+        for index, song in enumerate(showdown["songs"]):
+            audio_upload = save_upload(request.files.get(f"audio_upload_{index}"), "audio", ALLOWED_AUDIO)
+            song["audio_url"] = audio_upload or request.form.get(f"audio_url_{index}", "").strip()
+            for field in ("anime", "song", "artist"):
+                song[field] = request.form.get(f"{field}_{index}", "").strip()
+            song["sample_mode"] = "random" if request.form.get(f"random_sample_{index}") else "fixed"
+            try:
+                song["sample_start"] = max(0, float(request.form.get(f"sample_start_{index}", 0)))
+            except ValueError:
+                song["sample_start"] = 0
+            try:
+                song["sample_end"] = max(0, float(request.form.get(f"sample_end_{index}", song["sample_start"] + 20)))
+            except ValueError:
+                song["sample_end"] = song["sample_start"] + 20
+            if song["sample_end"] <= song["sample_start"]:
+                song["sample_end"] = song["sample_start"] + 20
+        save_game(game)
+        return redirect(url_for("edit_final_showdown"))
+    return render_template("final_showdown_edit.html", game=game, mode="edit")
 
 
 @app.post("/edit/categories/swap")

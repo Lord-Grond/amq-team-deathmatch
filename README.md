@@ -14,7 +14,7 @@ Open `http://127.0.0.1:5000`.
 ## How it works
 
 - The main page is the playing board.
-- The board keeps four fixed groups: Easy 1-3, Medium 4-6, Hard 7-9, and Impossible 10-12.
+- The board keeps four fixed groups: Easy 1-3, Medium 4-6, Hard 7-9, and Mixed 10-12.
 - Each category has an introduction slide followed by ten slides: five music slides alternating with five answer slides.
 - Returning from the last answer marks the category red.
 - The board has two score counters with plus and minus controls.
